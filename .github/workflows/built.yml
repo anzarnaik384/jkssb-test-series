@@ -30,13 +30,13 @@ jobs:
 
       - name: Find project
         run: |
-          find project -name gradlew -type f
+          PROJECT_DIR=$(dirname "$(find project -name settings.gradle -o -name settings.gradle.kts | head -n 1)")
+          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+          echo "Project directory: $PROJECT_DIR"
 
       - name: Build APK
         run: |
-          PROJECT_DIR=$(dirname "$(find project -name gradlew -type f | head -n 1)")
-          chmod +x "$PROJECT_DIR/gradlew"
-          "$PROJECT_DIR/gradlew" -p "$PROJECT_DIR" assembleDebug
+          gradle -p "$PROJECT_DIR" assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
