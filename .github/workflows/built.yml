@@ -1,0 +1,44 @@
+name: Build JKSSB App
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Extract project ZIP
+        run: |
+          unzip -q JKSSB_Test_Series_Starter.zip -d project
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.9'
+
+      - name: Find project
+        run: |
+          find project -name gradlew -type f -exec chmod +x {} \;
+
+      - name: Build APK
+        run: |
+          cd project/JKSSB_Test_Series_Starter
+          gradle assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: JKSSB-Test-Series-APK
+          path: project/JKSSB_Test_Series_Starter/app/build/outputs/apk/debug/*.apk
