@@ -26,7 +26,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.9'
+          gradle-version: '8.13'
 
       - name: Find project
         run: |
@@ -34,12 +34,6 @@ jobs:
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
           echo "Project directory: $PROJECT_DIR"
 
-      - name: Build APK
+      - name: Update Gradle Wrapper
         run: |
-          gradle -p "$PROJECT_DIR" assembleDebug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: JKSSB-Test-Series-APK
-          path: project/**/build/outputs/apk/debug/*.apk
+          sed -
